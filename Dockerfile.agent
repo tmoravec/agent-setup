@@ -1,0 +1,62 @@
+FROM debian:trixie-slim
+
+ARG HOST_UID=1000
+ARG HOST_GID=1000
+ARG USERNAME=tadeas
+
+RUN echo 'APT::Install-Recommends "false";\nAPT::Install-Suggests "false";' \
+    > /etc/apt/apt.conf.d/99no-recommends
+RUN apt-get update
+RUN apt-get install -y locales
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+RUN locale-gen
+
+RUN apt-get install -y git mc exuberant-ctags tmux vim curl ca-certificates ripgrep jq libnss3-tools bubblewrap
+RUN (type -p wget >/dev/null || (apt update && apt install wget -y)) \
+	&& mkdir -p -m 755 /etc/apt/keyrings \
+	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+	&& cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+	&& chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+	&& mkdir -p -m 755 /etc/apt/sources.list.d \
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+	&& apt update \
+	&& apt install gh -y
+
+RUN groupadd -g $HOST_GID --non-unique $USERNAME
+RUN useradd -m -u $HOST_UID -g $HOST_GID --non-unique -s /bin/bash $USERNAME
+
+RUN mkdir -p /home/$USERNAME/.config
+RUN chown $USERNAME:$USERNAME /home/$USERNAME/.config
+COPY --chown=$USERNAME:$USERNAME bashrc.agent /home/$USERNAME/.bashrc
+COPY --chown=$USERNAME:$USERNAME agents /home/$USERNAME/.agents
+RUN ln -s /home/$USERNAME/.agents /home/$USERNAME/.claude
+RUN ln -s /home/$USERNAME/.agents /home/$USERNAME/.codex
+RUN ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.agents/CLAUDE.md
+RUN mkdir -p /home/$USERNAME/.config/opencode
+COPY --chown=$USERNAME:$USERNAME opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
+COPY --chown=$USERNAME:$USERNAME tmux.conf /home/$USERNAME/.tmux.conf
+COPY --chmod=755 claude-plugins-bootstrap.sh /usr/local/bin/claude-plugins-bootstrap
+COPY --chown=$USERNAME:$USERNAME --chmod=755 entrypoint-agent.sh /home/$USERNAME/start-agent.sh
+
+USER $USERNAME
+
+RUN git clone https://github.com/nvm-sh/nvm.git /home/$USERNAME/.nvm
+RUN cd /home/$USERNAME/.nvm && git checkout v0.40.4
+
+SHELL ["/bin/bash", "-c"]
+RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @anthropic-ai/claude-code
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @openai/codex
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-coding-agent
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g opencode-ai
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g apify-cli
+
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+
+RUN git clone --recursive https://github.com/tmoravec/vim /home/$USERNAME/vim-config
+RUN ln -s /home/$USERNAME/vim-config/vim /home/$USERNAME/.vim
+RUN ln -s /home/$USERNAME/vim-config/vimrc /home/$USERNAME/.vimrc
+
+WORKDIR /workspace
+
+CMD ["/bin/bash", "-c", "exec \"$HOME/start-agent.sh\""]

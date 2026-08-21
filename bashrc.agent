@@ -1,0 +1,21 @@
+HISTCONTROL=ignoreboth
+
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+alias ff='fg 1'
+alias ls='ls --color=auto'
+alias claude='claude --dangerously-skip-permissions --append-system-prompt-file /home/tadeas/.claude/sr_opus_5_system_prompt.md'
+alias codex='codex --yolo'
+
+export PS1='\[\e[0;32m\]\W \$\[\e[0m\] '
+export EDITOR=vim
+export TERM=xterm-256color
+
+#if command -v tmux > /dev/null; then
+#    [[ ! $TERM =~ screen ]] && [ -z $TMUX ] && tmux
+#fi
+
+export GPG_TTY=$(tty)
+export PATH="/home/tadeas/.local/bin:/usr/local/sbin:$PATH"
+source "$HOME/.nvm/nvm.sh"

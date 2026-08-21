@@ -1,0 +1,17 @@
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+      args:
+        HOST_UID: 501
+        HOST_GID: 20
+        USERNAME: ${USER}
+    volumes:
+      - /Users/tadeas/code:/workspace
+    stdin_open: true
+    tty: true
+    environment:
+      APIFY_TOKEN: ${APIFY_TOKEN:-}
+      GH_TOKEN: ${GH_TOKEN:-}
+    restart: unless-stopped

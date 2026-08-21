@@ -1,0 +1,24 @@
+{
+  "env": {},
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "model": "opus",
+  "extraKnownMarketplaces": {
+    "apify-agent-skills-internal": {
+      "source": {
+        "source": "directory",
+        "path": "/workspace/agent-skills-internal"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "principal-review@apify-agent-skills-internal": true,
+    "pending-review-comments@apify-agent-skills-internal": true
+  },
+  "effortLevel": "high",
+  "autoUpdatesChannel": "stable",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "light",
+  "remoteControlAtStartup": true
+}
