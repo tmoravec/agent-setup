@@ -10,11 +10,18 @@
         "source": "directory",
         "path": "/workspace/agent-skills-internal"
       }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
     }
   },
   "enabledPlugins": {
     "principal-review@apify-agent-skills-internal": true,
-    "pending-review-comments@apify-agent-skills-internal": true
+    "pending-review-comments@apify-agent-skills-internal": true,
+    "ponytail@ponytail": true
   },
   "effortLevel": "high",
   "autoUpdatesChannel": "stable",

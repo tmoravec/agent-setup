@@ -51,6 +51,14 @@ RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-codi
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g opencode-ai
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g apify-cli
 
+RUN source /home/$USERNAME/.nvm/nvm.sh \
+	&& claude plugin marketplace add DietrichGebert/ponytail \
+	&& claude plugin install ponytail@ponytail
+RUN source /home/$USERNAME/.nvm/nvm.sh \
+	&& codex plugin marketplace add DietrichGebert/ponytail \
+	&& codex plugin add ponytail@ponytail
+RUN source /home/$USERNAME/.nvm/nvm.sh && pi install git:github.com/DietrichGebert/ponytail
+
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 RUN git clone --recursive https://github.com/tmoravec/vim /home/$USERNAME/vim-config
