@@ -15,10 +15,10 @@ RUN apt-get install -y git mc exuberant-ctags tmux vim curl ca-certificates ripg
 RUN (type -p wget >/dev/null || (apt update && apt install wget -y)) \
 	&& mkdir -p -m 755 /etc/apt/keyrings \
 	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-	&& cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
-	&& chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+	&& cat $out | tee /etc/apt/keyrings/github-cli-archive-keyring.gpg > /dev/null \
+	&& chmod go+r /etc/apt/keyrings/github-cli-archive-keyring.gpg \
 	&& mkdir -p -m 755 /etc/apt/sources.list.d \
-	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/github-cli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
 	&& apt update \
 	&& apt install gh -y
 
@@ -27,11 +27,21 @@ RUN useradd -m -u $HOST_UID -g $HOST_GID --non-unique -s /bin/bash $USERNAME
 
 RUN mkdir -p /home/$USERNAME/.config
 RUN chown $USERNAME:$USERNAME /home/$USERNAME/.config
+
 COPY --chown=$USERNAME:$USERNAME bashrc.agent /home/$USERNAME/.bashrc
 COPY --chown=$USERNAME:$USERNAME agents /home/$USERNAME/.agents
-RUN ln -s /home/$USERNAME/.agents /home/$USERNAME/.claude
-RUN ln -s /home/$USERNAME/.agents /home/$USERNAME/.codex
-RUN ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.agents/CLAUDE.md
+
+# Claude and Codex need separate writable state directories. Only the
+# hand-maintained configuration shared between them is linked from ~/.agents.
+RUN mkdir -p /home/$USERNAME/.claude /home/$USERNAME/.codex \
+	&& chown $USERNAME:$USERNAME /home/$USERNAME/.claude /home/$USERNAME/.codex \
+	&& ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.claude/CLAUDE.md \
+	&& ln -s /home/$USERNAME/.agents/skills /home/$USERNAME/.claude/skills \
+	&& ln -s /home/$USERNAME/.agents/settings.json /home/$USERNAME/.claude/settings.json \
+	&& ln -s /home/$USERNAME/.agents/sr_opus_5_system_prompt.md /home/$USERNAME/.claude/sr_opus_5_system_prompt.md \
+	&& ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.codex/AGENTS.md \
+	&& ln -s /home/$USERNAME/.agents/skills /home/$USERNAME/.codex/skills
+
 RUN mkdir -p /home/$USERNAME/.config/opencode
 COPY --chown=$USERNAME:$USERNAME opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
 COPY --chown=$USERNAME:$USERNAME tmux.conf /home/$USERNAME/.tmux.conf
