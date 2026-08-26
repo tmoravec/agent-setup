@@ -14,19 +14,10 @@ RUN locale-gen
 
 RUN apt-get install -y git vim curl ca-certificates
 
-# Install cloudflared via Cloudflare's apt repo
-RUN mkdir -p --mode=0755 /usr/share/keyrings && \
-    curl -fsSL https://pkg.cloudflare.com/cloudflare-main.gpg \
-        -o /usr/share/keyrings/cloudflare-main.gpg && \
-    echo 'deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared any main' \
-        > /etc/apt/sources.list.d/cloudflared.list && \
-    apt-get update && \
-    apt-get install -y cloudflared
-
 RUN groupadd -g $HOST_GID --non-unique $USERNAME
 RUN useradd -m -u $HOST_UID -g $HOST_GID --non-unique -s /bin/bash $USERNAME
 
-COPY --chown=$USERNAME:$USERNAME bashrc /home/$USERNAME/.bashrc
+COPY --chown=$USERNAME:$USERNAME bashrc.agent /home/$USERNAME/.bashrc
 
 RUN git clone https://github.com/nvm-sh/nvm.git /home/$USERNAME/.nvm
 RUN cd /home/$USERNAME/.nvm && git checkout v0.40.4
@@ -43,4 +34,3 @@ RUN chmod +x /app/entrypoint.sh
 
 USER $USERNAME
 CMD ["/app/entrypoint.sh"]
-

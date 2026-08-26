@@ -5,10 +5,10 @@ This repository builds Docker environments for running AI development tools and 
 ## Repository layout
 
 - `Dockerfile.agent` builds the interactive AI-tool image. It installs shell tooling, Node.js through NVM, AI coding CLIs, `uv`, and the user configuration under `agents/`.
-- `Dockerfile.mcp` builds the filesystem MCP service image. It runs the MCP filesystem server through Supergateway and exposes it through a Cloudflare tunnel.
+- `Dockerfile.mcp` builds the filesystem MCP service image. It runs the MCP filesystem server through Supergateway.
 - `docker-compose.yml` defines the local agent service, its build arguments, workspace mount, terminal settings, and runtime environment.
 - `entrypoint-agent.sh` registers runtime-mounted Claude plugins and keeps the interactive container running.
-- `entrypoint-mcp.sh` supervises Supergateway and Cloudflare Tunnel, stopping the container if either process exits.
+- `entrypoint-mcp.sh` starts Supergateway as the container process.
 - `bashrc.agent`, `tmux.conf`, and `opencode.jsonc` configure the interactive environment.
 - `agents/` is copied into the container and shared by the supported AI tools through symlinks.
 - `claude-plugins-bootstrap.sh` installs workspace-provided Claude plugins when they are available.
