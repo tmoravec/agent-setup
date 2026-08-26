@@ -13,8 +13,8 @@
     },
     "ponytail": {
       "source": {
-        "source": "github",
-        "repo": "DietrichGebert/ponytail"
+        "source": "directory",
+        "path": "/opt/ponytail"
       }
     }
   },

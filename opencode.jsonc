@@ -94,5 +94,5 @@
       }
     }
   },
-  "plugin": ["@dietrichgebert/ponytail"]
+  "plugin": ["/opt/ponytail/.opencode/plugins/ponytail.mjs"]
 }

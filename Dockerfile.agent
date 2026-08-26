@@ -37,6 +37,7 @@ COPY --chown=$USERNAME:$USERNAME opencode.jsonc /home/$USERNAME/.config/opencode
 COPY --chown=$USERNAME:$USERNAME tmux.conf /home/$USERNAME/.tmux.conf
 COPY --chmod=755 claude-plugins-bootstrap.sh /usr/local/bin/claude-plugins-bootstrap
 COPY --chown=$USERNAME:$USERNAME --chmod=755 entrypoint-agent.sh /home/$USERNAME/start-agent.sh
+COPY ponytail /opt/ponytail
 
 USER $USERNAME
 
@@ -52,12 +53,12 @@ RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g opencode-ai
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g apify-cli
 
 RUN source /home/$USERNAME/.nvm/nvm.sh \
-	&& claude plugin marketplace add DietrichGebert/ponytail \
+	&& claude plugin marketplace add /opt/ponytail \
 	&& claude plugin install ponytail@ponytail
 RUN source /home/$USERNAME/.nvm/nvm.sh \
-	&& codex plugin marketplace add DietrichGebert/ponytail \
+	&& codex plugin marketplace add /opt/ponytail \
 	&& codex plugin add ponytail@ponytail
-RUN source /home/$USERNAME/.nvm/nvm.sh && pi install git:github.com/DietrichGebert/ponytail
+RUN source /home/$USERNAME/.nvm/nvm.sh && pi install /opt/ponytail
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
