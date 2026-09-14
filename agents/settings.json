@@ -1,7 +1,19 @@
 {
   "env": {},
   "permissions": {
-    "defaultMode": "bypassPermissions"
+    "defaultMode": "bypassPermissions",
+    "deny": [
+      "Artifact",
+      "AskUserQuestion",
+      "CronCreate",
+      "CronDelete",
+      "Monitor",
+      "NotebookEdit",
+      "PushNotification",
+      "RemoteTrigger",
+      "SendUserFile",
+      "ShareOnboardingGuide"
+    ]
   },
   "model": "opus",
   "extraKnownMarketplaces": {
