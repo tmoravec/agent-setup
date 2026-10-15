@@ -1,6 +1,17 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
+    "ollama-cloud": {
+      "options": {
+        "apiKey": "{env:OLLAMA_CLOUD_TOKEN}"
+      },
+      "models": {
+        "kimi-k3": { "options": { "reasoningEffort": "high" } },
+        "kimi-k2.7-code": { "options": { "reasoningEffort": "high" } },
+        "glm-5.3": { "options": { "reasoningEffort": "high" } },
+        "deepseek-v4.1-flash": { "options": { "reasoningEffort": "high" } }
+      }
+    },
     "openrouter": {
       "models": {
         "deepseek/deepseek-v4-pro": {

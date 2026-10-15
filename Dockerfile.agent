@@ -44,6 +44,9 @@ RUN mkdir -p /home/$USERNAME/.claude /home/$USERNAME/.codex \
 
 RUN mkdir -p /home/$USERNAME/.config/opencode
 COPY --chown=$USERNAME:$USERNAME opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
+RUN mkdir -p /home/$USERNAME/.pi/agent && chown -R $USERNAME:$USERNAME /home/$USERNAME/.pi
+COPY --chown=$USERNAME:$USERNAME pi-models.json /home/$USERNAME/.pi/agent/models.json
+COPY --chown=$USERNAME:$USERNAME pi-settings.json /home/$USERNAME/.pi/agent/settings.json
 COPY --chown=$USERNAME:$USERNAME tmux.conf /home/$USERNAME/.tmux.conf
 COPY --chmod=755 claude-plugins-bootstrap.sh /usr/local/bin/claude-plugins-bootstrap
 COPY --chown=$USERNAME:$USERNAME --chmod=755 entrypoint-agent.sh /home/$USERNAME/start-agent.sh

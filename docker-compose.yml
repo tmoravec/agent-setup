@@ -14,6 +14,7 @@ services:
     environment:
       APIFY_TOKEN: ${APIFY_TOKEN:-}
       GH_TOKEN: ${GH_TOKEN:-}
+      OLLAMA_CLOUD_TOKEN: ${OLLAMA_CLOUD_TOKEN:-}
     restart: unless-stopped
 
   mcp:
