@@ -42,8 +42,9 @@ RUN mkdir -p /home/$USERNAME/.claude /home/$USERNAME/.codex \
 	&& ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.codex/AGENTS.md \
 	&& ln -s /home/$USERNAME/.agents/skills /home/$USERNAME/.codex/skills
 
-RUN mkdir -p /home/$USERNAME/.config/opencode
+RUN mkdir -p /home/$USERNAME/.config/opencode && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/opencode
 COPY --chown=$USERNAME:$USERNAME opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
+RUN ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.config/opencode/AGENTS.md
 RUN mkdir -p /home/$USERNAME/.pi/agent && chown -R $USERNAME:$USERNAME /home/$USERNAME/.pi
 COPY --chown=$USERNAME:$USERNAME pi-models.json /home/$USERNAME/.pi/agent/models.json
 COPY --chown=$USERNAME:$USERNAME pi-settings.json /home/$USERNAME/.pi/agent/settings.json
@@ -62,7 +63,7 @@ RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @anthropic-ai/claude-code
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @openai/codex
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-coding-agent
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g opencode-ai
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @opencode/cli
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g apify-cli
 
 RUN source /home/$USERNAME/.nvm/nvm.sh \

@@ -4,7 +4,7 @@
     "ollama-cloud": {
       "baseUrl": "https://ollama.com/v1",
       "api": "openai-completions",
-      "apiKey": "$OLLAMA_CLOUD_TOKEN",
+      "apiKey": "$OLLAMA_API_KEY",
       "models": [
         { "id": "kimi-k3", "reasoning": true, "contextWindow": 1048576, "maxTokens": 131072 },
         { "id": "kimi-k2.7-code", "reasoning": true, "contextWindow": 262144, "maxTokens": 262144 },
