@@ -16,16 +16,16 @@ services:
       GH_TOKEN: ${GH_TOKEN:-}
     restart: unless-stopped
 
-#  mcp:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.mcp
-#      args:
-#        HOST_UID: 501
-#        HOST_GID: 20
-#        USERNAME: ${USER}
-#    ports:
-#      - "127.0.0.1:3000:3000"
-#    volumes:
-#      - "/Users/tadeas/Library/Mobile Documents/iCloud~md~obsidian/Documents/Poznamky/Apify:/data"
-#    restart: unless-stopped
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.mcp
+      args:
+        HOST_UID: 501
+        HOST_GID: 20
+        USERNAME: ${USER}
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - "/Users/tadeas/Library/Mobile Documents/iCloud~md~obsidian/Documents/Poznamky/Apify:/data"
+    restart: unless-stopped
