@@ -3,6 +3,7 @@ FROM node:24-bookworm-slim
 ARG HOST_UID=501
 ARG HOST_GID=20
 ARG USERNAME=tadeas
+ARG TARGETARCH
 
 RUN echo 'APT::Install-Recommends "false";\nAPT::Install-Suggests "false";' \
     > /etc/apt/apt.conf.d/99no-recommends
@@ -41,6 +42,9 @@ RUN mkdir -p /home/$USERNAME/.config/opencode /home/$USERNAME/.local/share/openc
 COPY --chown=$USERNAME:$USERNAME mcp/opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
 COPY --chown=$USERNAME:$USERNAME mcp/SYSTEM_PROMPT.md /home/$USERNAME/.config/opencode/SYSTEM_PROMPT.md
 COPY --chown=$USERNAME:$USERNAME mcp/AGENTS.md /home/$USERNAME/.config/opencode/AGENTS.md
+
+COPY mcp/slack/slack-mcp-server-linux-${TARGETARCH} /usr/local/bin/slack-mcp-server
+RUN chmod +x /usr/local/bin/slack-mcp-server
 
 WORKDIR /app
 COPY --chown=$USERNAME:$USERNAME entrypoint-mcp.sh /app/entrypoint.sh

@@ -19,6 +19,15 @@
         "oauth": {
           "callback_port": 4098
         }
+      },
+      "slack": {
+        "type": "local",
+        "command": ["/usr/local/bin/slack-mcp-server", "--transport", "stdio"],
+        "environment": {
+          "SLACK_MCP_XOXC_TOKEN": "{env:SLACK_MCP_XOXC_TOKEN}",
+          "SLACK_MCP_XOXD_TOKEN": "{env:SLACK_MCP_XOXD_TOKEN}",
+          "SLACK_MCP_ENABLED_TOOLS": "channels_list,conversations_history,conversations_replies,conversations_search_messages,conversations_unreads,users_search,usergroups_list"
+        }
       }
     }
   },
