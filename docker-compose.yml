@@ -2,13 +2,14 @@ services:
   agent:
     build:
       context: .
-      dockerfile: Dockerfile.agent
+      dockerfile: agent/Dockerfile
       args:
         HOST_UID: 501
         HOST_GID: 20
-        USERNAME: ${USER}
+        USERNAME: tadeas
     volumes:
       - /Users/tadeas/code:/workspace
+      - agent-opencode-data:/home/tadeas/.local/share/opencode
     ports:
       - "127.0.0.1:4096:4096"
     stdin_open: true
@@ -21,14 +22,14 @@ services:
       OPENCODE_SERVER_PASSWORD: ${OPENCODE_SERVER_PASSWORD:-}
     restart: unless-stopped
 
-  mcp:
+  vault:
     build:
       context: .
-      dockerfile: Dockerfile.mcp
+      dockerfile: vault/Dockerfile
       args:
         HOST_UID: 501
         HOST_GID: 20
-        USERNAME: ${USER}
+        USERNAME: tadeas
     ports:
       - "127.0.0.1:3000:3000"
       - "127.0.0.1:4097:4097"
@@ -36,7 +37,7 @@ services:
       - "127.0.0.1:4098:4099"
     volumes:
       - "/Users/tadeas/Library/Mobile Documents/iCloud~md~obsidian/Documents/Poznamky/Apify:/data"
-      - mcp-opencode-data:/home/${USER}/.local/share/opencode
+      - vault-opencode-data:/home/tadeas/.local/share/opencode
     environment:
       APIFY_TOKEN: ${APIFY_TOKEN:-}
       GCAL_ACCESS_KEY: ${GCAL_ACCESS_KEY:-}
@@ -50,4 +51,5 @@ services:
     restart: unless-stopped
 
 volumes:
-  mcp-opencode-data:
+  agent-opencode-data:
+  vault-opencode-data:

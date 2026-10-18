@@ -13,6 +13,8 @@
   },
   "mcp": {
     "servers": {
+      // OAuth callback port 4098: compose publishes 4098->4099 and
+      // vault/entrypoint.sh bridges 4099->4098. Keep all three in sync.
       "notion": {
         "type": "remote",
         "url": "https://mcp.notion.com/mcp",
@@ -56,16 +58,34 @@
     }
   },
   "providers": {
-    "ollama-cloud": {
+    "ollama-cloud-shortlist": {
+      "name": "Ollama Cloud",
+      "canonical": "ollama-cloud",
+      "package": "@opencode/ai/providers/openai-compatible",
       "settings": {
+        "baseURL": "https://ollama.com/v1",
         "apiKey": "{env:OLLAMA_API_KEY}"
       },
       "models": {
         "deepseek-v4.1-flash": { "settings": { "reasoningEffort": "high" } },
         "kimi-k3": { "settings": { "reasoningEffort": "high" } },
-        "kimi-k2.7-code": { "settings": { "reasoningEffort": "high" } },
-        "glm-5.3": { "settings": { "reasoningEffort": "high" } }
+        "glm-5.3-flash": { "settings": { "reasoningEffort": "high" } }
+      }
+    },
+    "openrouter-shortlist": {
+      "name": "OpenRouter",
+      "canonical": "openrouter",
+      "package": "@opencode/ai/providers/openrouter",
+      "env": ["OPENROUTER_API_KEY"],
+      "models": {
+        "openai/gpt-6.1-sol": {},
+        "anthropic/claude-opus-5.5": {}
       }
     }
-  }
+  },
+  "policies": [
+    { "action": "provider.use", "resource": "*", "effect": "deny" },
+    { "action": "provider.use", "resource": "ollama-cloud-shortlist", "effect": "allow" },
+    { "action": "provider.use", "resource": "openrouter-shortlist", "effect": "allow" }
+  ]
 }

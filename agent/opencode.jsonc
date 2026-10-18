@@ -1,0 +1,34 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "providers": {
+    "ollama-cloud-shortlist": {
+      "name": "Ollama Cloud",
+      "canonical": "ollama-cloud",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "settings": {
+        "baseURL": "https://ollama.com/v1",
+        "apiKey": "{env:OLLAMA_API_KEY}"
+      },
+      "models": {
+        "deepseek-v4.1-flash": { "settings": { "reasoningEffort": "high" } },
+        "kimi-k3": { "settings": { "reasoningEffort": "high" } },
+        "glm-5.3-flash": { "settings": { "reasoningEffort": "high" } }
+      }
+    },
+    "openrouter-shortlist": {
+      "name": "OpenRouter",
+      "canonical": "openrouter",
+      "env": ["OPENROUTER_API_KEY"],
+      "models": {
+        "openai/gpt-6.1-sol": {},
+        "anthropic/claude-opus-5.5": {}
+      }
+    }
+  },
+  "policies": [
+    { "action": "provider.use", "resource": "*", "effect": "deny" },
+    { "action": "provider.use", "resource": "ollama-cloud-shortlist", "effect": "allow" },
+    { "action": "provider.use", "resource": "openrouter-shortlist", "effect": "allow" }
+  ],
+  "plugins": ["/opt/ponytail/.opencode/plugins/ponytail"]
+}

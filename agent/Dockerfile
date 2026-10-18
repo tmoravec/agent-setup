@@ -1,7 +1,7 @@
-FROM debian:trixie-slim
+FROM debian:trixie-slim@sha256:a29215f6a35e51e22adffa17f89e9d2ef06214e64a2bad10d765c46aea49f11f
 
-ARG HOST_UID=1000
-ARG HOST_GID=1000
+ARG HOST_UID=501
+ARG HOST_GID=20
 ARG USERNAME=tadeas
 
 RUN echo 'APT::Install-Recommends "false";\nAPT::Install-Suggests "false";' \
@@ -26,8 +26,8 @@ RUN useradd -m -u $HOST_UID -g $HOST_GID --non-unique -s /bin/bash $USERNAME
 RUN mkdir -p /home/$USERNAME/.config
 RUN chown $USERNAME:$USERNAME /home/$USERNAME/.config
 
-COPY --chown=$USERNAME:$USERNAME bashrc.agent /home/$USERNAME/.bashrc
-COPY --chown=$USERNAME:$USERNAME agents /home/$USERNAME/.agents
+COPY --chown=$USERNAME:$USERNAME shared/bashrc /home/$USERNAME/.bashrc
+COPY --chown=$USERNAME:$USERNAME shared/agents /home/$USERNAME/.agents
 
 # Claude and Codex need separate writable state directories. Only the
 # hand-maintained configuration shared between them is linked from ~/.agents.
@@ -40,29 +40,31 @@ RUN mkdir -p /home/$USERNAME/.claude /home/$USERNAME/.codex \
 	&& ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.codex/AGENTS.md \
 	&& ln -s /home/$USERNAME/.agents/skills /home/$USERNAME/.codex/skills
 
-RUN mkdir -p /home/$USERNAME/.config/opencode && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/opencode
-COPY --chown=$USERNAME:$USERNAME opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
+RUN mkdir -p /home/$USERNAME/.config/opencode /home/$USERNAME/.local/share/opencode \
+	&& chown -R $USERNAME:$USERNAME /home/$USERNAME/.config /home/$USERNAME/.local
+COPY --chown=$USERNAME:$USERNAME agent/opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
 RUN ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.config/opencode/AGENTS.md
 RUN mkdir -p /home/$USERNAME/.pi/agent && chown -R $USERNAME:$USERNAME /home/$USERNAME/.pi
-COPY --chown=$USERNAME:$USERNAME pi-models.json /home/$USERNAME/.pi/agent/models.json
-COPY --chown=$USERNAME:$USERNAME pi-settings.json /home/$USERNAME/.pi/agent/settings.json
-COPY --chown=$USERNAME:$USERNAME tmux.conf /home/$USERNAME/.tmux.conf
-COPY --chmod=755 claude-plugins-bootstrap.sh /usr/local/bin/claude-plugins-bootstrap
-COPY --chown=$USERNAME:$USERNAME --chmod=755 entrypoint-agent.sh /home/$USERNAME/start-agent.sh
-COPY ponytail /opt/ponytail
+COPY --chown=$USERNAME:$USERNAME agent/pi-models.json /home/$USERNAME/.pi/agent/models.json
+COPY --chown=$USERNAME:$USERNAME agent/pi-settings.json /home/$USERNAME/.pi/agent/settings.json
+COPY --chown=$USERNAME:$USERNAME agent/tmux.conf /home/$USERNAME/.tmux.conf
+COPY --chmod=755 agent/claude-plugins-bootstrap.sh /usr/local/bin/claude-plugins-bootstrap
+COPY --chown=$USERNAME:$USERNAME --chmod=755 agent/entrypoint.sh /home/$USERNAME/start-agent.sh
+COPY agent/ponytail /opt/ponytail
 
 USER $USERNAME
+ENV HOME=/home/tadeas
 
 RUN git clone https://github.com/nvm-sh/nvm.git /home/$USERNAME/.nvm
 RUN cd /home/$USERNAME/.nvm && git checkout v0.40.4
 
 SHELL ["/bin/bash", "-c"]
-RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @anthropic-ai/claude-code
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @openai/codex
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-coding-agent
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @opencode/cli
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g apify-cli
+RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24.22.0 && nvm alias default 24.22.0
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @anthropic-ai/claude-code@2.1.302
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @openai/codex@0.163.0
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-coding-agent@1.3.0
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @opencode/cli@2.0.32
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g apify-cli@1.10.0
 
 RUN source /home/$USERNAME/.nvm/nvm.sh \
 	&& claude plugin marketplace add /opt/ponytail \
@@ -72,8 +74,9 @@ RUN source /home/$USERNAME/.nvm/nvm.sh \
 	&& codex plugin add ponytail@ponytail
 RUN source /home/$USERNAME/.nvm/nvm.sh && pi install /opt/ponytail
 
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN curl -LsSf https://astral.sh/uv/0.13.1/install.sh | sh
 
+# Intentionally unpinned: this is the user's own vim repository.
 RUN git clone --recursive https://github.com/tmoravec/vim /home/$USERNAME/vim-config
 RUN ln -s /home/$USERNAME/vim-config/vim /home/$USERNAME/.vim
 RUN ln -s /home/$USERNAME/vim-config/vimrc /home/$USERNAME/.vimrc

@@ -9,7 +9,7 @@ don't have the GPG key anyway and commits must be signed by policy.
 The user commits by hand in a different environment.
 Read-only Git operations are allowed.
 
-### Github
-Use gh for accessing Github. Never change anything in Github on your own.
+### GitHub
+Use gh for accessing GitHub. Never change anything in GitHub on your own.
 No new comments, no new issues, no new PRs, nothing.
 You can at most suggest the user to perform an action by hand.

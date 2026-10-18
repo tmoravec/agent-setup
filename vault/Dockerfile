@@ -1,4 +1,4 @@
-FROM node:24-bookworm-slim
+FROM node:24.22.0-bookworm-slim@sha256:a5f4366e834695d5f363b920c104953a535d3a9864d1bdf74566a0ebe01daee5
 
 ARG HOST_UID=501
 ARG HOST_GID=20
@@ -25,31 +25,29 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
 RUN groupadd -g $HOST_GID --non-unique $USERNAME
 RUN useradd -m -u $HOST_UID -g $HOST_GID --non-unique -s /bin/bash $USERNAME
 
-COPY --chown=$USERNAME:$USERNAME bashrc.agent /home/$USERNAME/.bashrc
-
-RUN git clone https://github.com/nvm-sh/nvm.git /home/$USERNAME/.nvm
-RUN cd /home/$USERNAME/.nvm && git checkout v0.40.4
-
-SHELL ["/bin/bash", "-c"]
-RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24
-
-# Pre-install MCP packages so no network calls happen on container start
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g supergateway @modelcontextprotocol/server-filesystem
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @opencode/cli
+COPY --chown=$USERNAME:$USERNAME shared/bashrc /home/$USERNAME/.bashrc
 
 RUN mkdir -p /home/$USERNAME/.config/opencode /home/$USERNAME/.local/share/opencode \
     && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config /home/$USERNAME/.local
-COPY --chown=$USERNAME:$USERNAME mcp/opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
-COPY --chown=$USERNAME:$USERNAME mcp/SYSTEM_PROMPT.md /home/$USERNAME/.config/opencode/SYSTEM_PROMPT.md
-COPY --chown=$USERNAME:$USERNAME mcp/AGENTS.md /home/$USERNAME/.config/opencode/AGENTS.md
+COPY --chown=$USERNAME:$USERNAME vault/opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
+COPY --chown=$USERNAME:$USERNAME vault/SYSTEM_PROMPT.md /home/$USERNAME/.config/opencode/SYSTEM_PROMPT.md
+COPY --chown=$USERNAME:$USERNAME vault/AGENTS.md /home/$USERNAME/.config/opencode/AGENTS.md
 
-COPY mcp/slack/slack-mcp-server-linux-${TARGETARCH} /usr/local/bin/slack-mcp-server
+COPY vault/slack/slack-mcp-server-linux-${TARGETARCH} /usr/local/bin/slack-mcp-server
 RUN chmod +x /usr/local/bin/slack-mcp-server
 
 WORKDIR /app
-COPY --chown=$USERNAME:$USERNAME entrypoint-mcp.sh /app/entrypoint.sh
-COPY --chown=$USERNAME:$USERNAME mcp/google-calendar/server.mjs /app/google-calendar-server.mjs
+COPY --chown=$USERNAME:$USERNAME vault/entrypoint.sh /app/entrypoint.sh
+COPY --chown=$USERNAME:$USERNAME vault/google-calendar/server.mjs /app/google-calendar-server.mjs
 RUN chmod +x /app/entrypoint.sh
 
 USER $USERNAME
+
+# Use the base image's Node runtime. Install global packages under the
+# unprivileged user so they remain writable at runtime.
+ENV HOME=/home/tadeas
+ENV NPM_CONFIG_PREFIX=/home/tadeas/.npm-global
+ENV PATH=/home/tadeas/.npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+RUN npm install -g supergateway@4.2.0 @modelcontextprotocol/server-filesystem@1.0.0 @opencode/cli@2.0.32
+
 CMD ["/app/entrypoint.sh"]

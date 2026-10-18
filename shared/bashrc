@@ -5,7 +5,7 @@ export LANG=en_US.UTF-8
 
 alias ff='fg 1'
 alias ls='ls --color=auto'
-alias claude='claude --dangerously-skip-permissions --append-system-prompt-file /home/tadeas/.claude/sr_opus_5_system_prompt.md'
+alias claude='claude --dangerously-skip-permissions --append-system-prompt-file "$HOME/.claude/sr_opus_5_system_prompt.md"'
 alias codex='codex --yolo'
 
 export PS1='\[\e[0;32m\]\W \$\[\e[0m\] '
@@ -17,5 +17,7 @@ export TERM=xterm-256color
 #fi
 
 export GPG_TTY=$(tty)
-export PATH="/home/tadeas/.local/bin:/usr/local/sbin:$PATH"
-source "$HOME/.nvm/nvm.sh"
+export PATH="$HOME/.npm-global/bin:$HOME/.local/bin:/usr/local/sbin:$PATH"
+if [ -s "$HOME/.nvm/nvm.sh" ]; then
+	source "$HOME/.nvm/nvm.sh"
+fi
