@@ -1,14 +1,19 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "default_agent": "chief-of-staff",
+  "permissions": [
+    { "action": "external_directory", "resource": "*", "effect": "deny" },
+    // Shell bypasses external_directory; keep it disabled.
+    { "action": "shell", "resource": "*", "effect": "deny" },
+    { "action": "webfetch", "resource": "*", "effect": "ask" },
+    { "action": "websearch", "resource": "*", "effect": "ask" }
+  ],
+  "plugins": ["/opt/vault-guard"],
   "agents": {
     "chief-of-staff": {
       "description": "Ted's management consultant and chief of staff for the Apify vault",
       "mode": "primary",
-      "system": "{file:SYSTEM_PROMPT.md}",
-      "permissions": [
-        { "action": "external_directory", "resource": "*", "effect": "deny" }
-      ]
+      "system": "{file:SYSTEM_PROMPT.md}"
     }
   },
   "mcp": {

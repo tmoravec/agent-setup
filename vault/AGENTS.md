@@ -1,8 +1,4 @@
 ### GitHub
 
-Use `gh` for accessing GitHub. It is already authenticated through `GH_TOKEN`,
-so never run `gh auth login`.
-
-Treat GitHub as read-only: never create or change anything on your own — no
-comments, issues, PRs, or other writes. You can at most suggest that the user
-perform an action by hand.
+GitHub is not accessible from this workspace. Do not attempt to use `gh` or
+shell commands. If a GitHub action is needed, suggest that Ted perform it by hand.
