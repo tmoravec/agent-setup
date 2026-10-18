@@ -11,6 +11,17 @@
       ]
     }
   },
+  "mcp": {
+    "servers": {
+      "notion": {
+        "type": "remote",
+        "url": "https://mcp.notion.com/mcp",
+        "oauth": {
+          "callback_port": 4098
+        }
+      }
+    }
+  },
   "providers": {
     "ollama-cloud": {
       "settings": {

@@ -32,10 +32,16 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
       - "127.0.0.1:4097:4097"
+      # Host 4098 -> bridge 4099 -> opencode's OAuth callback on 127.0.0.1:4098.
+      - "127.0.0.1:4098:4099"
     volumes:
       - "/Users/tadeas/Library/Mobile Documents/iCloud~md~obsidian/Documents/Poznamky/Apify:/data"
+      - mcp-opencode-data:/home/${USER}/.local/share/opencode
     environment:
       OLLAMA_API_KEY: ${OLLAMA_API_KEY:-}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       OPENCODE_SERVER_PASSWORD: ${OPENCODE_SERVER_PASSWORD:-}
     restart: unless-stopped
+
+volumes:
+  mcp-opencode-data:
