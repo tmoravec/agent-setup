@@ -44,6 +44,14 @@
           "callback_port": 4098,
           "scope": "boards:read"
         }
+      },
+      "google-calendar": {
+        "type": "local",
+        "command": ["node", "/app/google-calendar-server.mjs"],
+        "environment": {
+          "GCAL_APPS_SCRIPT_URL": "{env:GCAL_APPS_SCRIPT_URL}",
+          "GCAL_ACCESS_KEY": "{env:GCAL_ACCESS_KEY}"
+        }
       }
     }
   },

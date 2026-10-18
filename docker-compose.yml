@@ -39,6 +39,8 @@ services:
       - mcp-opencode-data:/home/${USER}/.local/share/opencode
     environment:
       APIFY_TOKEN: ${APIFY_TOKEN:-}
+      GCAL_ACCESS_KEY: ${GCAL_ACCESS_KEY:-}
+      GCAL_APPS_SCRIPT_URL: ${GCAL_APPS_SCRIPT_URL:-}
       GH_TOKEN: ${GH_TOKEN:-}
       OLLAMA_API_KEY: ${OLLAMA_API_KEY:-}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}

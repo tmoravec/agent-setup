@@ -48,6 +48,7 @@ RUN chmod +x /usr/local/bin/slack-mcp-server
 
 WORKDIR /app
 COPY --chown=$USERNAME:$USERNAME entrypoint-mcp.sh /app/entrypoint.sh
+COPY --chown=$USERNAME:$USERNAME mcp/google-calendar/server.mjs /app/google-calendar-server.mjs
 RUN chmod +x /app/entrypoint.sh
 
 USER $USERNAME
