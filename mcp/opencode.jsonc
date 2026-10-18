@@ -22,7 +22,7 @@
       },
       "slack": {
         "type": "local",
-        "command": ["/usr/local/bin/slack-mcp-server", "--transport", "stdio"],
+        "command": ["/usr/local/bin/slack-mcp-server", "-no-cache", "--transport", "stdio"],
         "environment": {
           "SLACK_MCP_XOXC_TOKEN": "{env:SLACK_MCP_XOXC_TOKEN}",
           "SLACK_MCP_XOXD_TOKEN": "{env:SLACK_MCP_XOXD_TOKEN}",
@@ -35,6 +35,14 @@
         "oauth": false,
         "headers": {
           "Authorization": "Bearer {env:APIFY_TOKEN}"
+        }
+      },
+      "miro": {
+        "type": "remote",
+        "url": "https://mcp.miro.com/",
+        "oauth": {
+          "callback_port": 4098,
+          "scope": "boards:read"
         }
       }
     }
