@@ -8,11 +8,18 @@ RUN echo 'APT::Install-Recommends "false";\nAPT::Install-Suggests "false";' \
     > /etc/apt/apt.conf.d/99no-recommends
 
 RUN apt-get update
-RUN apt-get install -y locales
+RUN apt-get install -y locales curl ca-certificates
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 RUN locale-gen
 
-RUN apt-get install -y git vim curl ca-certificates ripgrep socat
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+	&& curl -fsSL -o /etc/apt/keyrings/github-cli-archive-keyring.gpg \
+		https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+	&& chmod go+r /etc/apt/keyrings/github-cli-archive-keyring.gpg \
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/github-cli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+		> /etc/apt/sources.list.d/github-cli.list \
+	&& apt-get update \
+	&& apt-get install -y git vim ripgrep socat gh
 
 RUN groupadd -g $HOST_GID --non-unique $USERNAME
 RUN useradd -m -u $HOST_UID -g $HOST_GID --non-unique -s /bin/bash $USERNAME
@@ -33,6 +40,7 @@ RUN mkdir -p /home/$USERNAME/.config/opencode /home/$USERNAME/.local/share/openc
     && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config /home/$USERNAME/.local
 COPY --chown=$USERNAME:$USERNAME mcp/opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
 COPY --chown=$USERNAME:$USERNAME mcp/SYSTEM_PROMPT.md /home/$USERNAME/.config/opencode/SYSTEM_PROMPT.md
+COPY --chown=$USERNAME:$USERNAME mcp/AGENTS.md /home/$USERNAME/.config/opencode/AGENTS.md
 
 WORKDIR /app
 COPY --chown=$USERNAME:$USERNAME entrypoint-mcp.sh /app/entrypoint.sh

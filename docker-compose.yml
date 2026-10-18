@@ -38,6 +38,7 @@ services:
       - "/Users/tadeas/Library/Mobile Documents/iCloud~md~obsidian/Documents/Poznamky/Apify:/data"
       - mcp-opencode-data:/home/${USER}/.local/share/opencode
     environment:
+      GH_TOKEN: ${GH_TOKEN:-}
       OLLAMA_API_KEY: ${OLLAMA_API_KEY:-}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
       OPENCODE_SERVER_PASSWORD: ${OPENCODE_SERVER_PASSWORD:-}

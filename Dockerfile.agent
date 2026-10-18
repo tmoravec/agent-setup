@@ -7,20 +7,18 @@ ARG USERNAME=tadeas
 RUN echo 'APT::Install-Recommends "false";\nAPT::Install-Suggests "false";' \
     > /etc/apt/apt.conf.d/99no-recommends
 RUN apt-get update
-RUN apt-get install -y locales
+RUN apt-get install -y locales curl ca-certificates
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 RUN locale-gen
 
-RUN apt-get install -y git mc exuberant-ctags tmux vim curl ca-certificates ripgrep jq libnss3-tools bubblewrap lynx
-RUN (type -p wget >/dev/null || (apt update && apt install wget -y)) \
-	&& mkdir -p -m 755 /etc/apt/keyrings \
-	&& out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
-	&& cat $out | tee /etc/apt/keyrings/github-cli-archive-keyring.gpg > /dev/null \
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+	&& curl -fsSL -o /etc/apt/keyrings/github-cli-archive-keyring.gpg \
+		https://cli.github.com/packages/githubcli-archive-keyring.gpg \
 	&& chmod go+r /etc/apt/keyrings/github-cli-archive-keyring.gpg \
-	&& mkdir -p -m 755 /etc/apt/sources.list.d \
-	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/github-cli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
-	&& apt update \
-	&& apt install gh -y
+	&& echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/github-cli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+		> /etc/apt/sources.list.d/github-cli.list \
+	&& apt-get update \
+	&& apt-get install -y git mc exuberant-ctags tmux vim ripgrep jq libnss3-tools bubblewrap lynx gh
 
 RUN groupadd -g $HOST_GID --non-unique $USERNAME
 RUN useradd -m -u $HOST_UID -g $HOST_GID --non-unique -s /bin/bash $USERNAME
