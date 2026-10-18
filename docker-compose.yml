@@ -31,6 +31,11 @@ services:
         USERNAME: ${USER}
     ports:
       - "127.0.0.1:3000:3000"
+      - "127.0.0.1:4097:4097"
     volumes:
       - "/Users/tadeas/Library/Mobile Documents/iCloud~md~obsidian/Documents/Poznamky/Apify:/data"
+    environment:
+      OLLAMA_API_KEY: ${OLLAMA_API_KEY:-}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      OPENCODE_SERVER_PASSWORD: ${OPENCODE_SERVER_PASSWORD:-}
     restart: unless-stopped

@@ -12,7 +12,7 @@ RUN apt-get install -y locales
 RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
 RUN locale-gen
 
-RUN apt-get install -y git vim curl ca-certificates
+RUN apt-get install -y git vim curl ca-certificates ripgrep
 
 RUN groupadd -g $HOST_GID --non-unique $USERNAME
 RUN useradd -m -u $HOST_UID -g $HOST_GID --non-unique -s /bin/bash $USERNAME
@@ -27,6 +27,11 @@ RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24
 
 # Pre-install MCP packages so no network calls happen on container start
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g supergateway @modelcontextprotocol/server-filesystem
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @opencode/cli
+
+RUN mkdir -p /home/$USERNAME/.config/opencode && chown -R $USERNAME:$USERNAME /home/$USERNAME/.config/opencode
+COPY --chown=$USERNAME:$USERNAME mcp/opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
+COPY --chown=$USERNAME:$USERNAME mcp/SYSTEM_PROMPT.md /home/$USERNAME/.config/opencode/SYSTEM_PROMPT.md
 
 WORKDIR /app
 COPY --chown=$USERNAME:$USERNAME entrypoint-mcp.sh /app/entrypoint.sh

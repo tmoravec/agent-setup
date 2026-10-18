@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "chief-of-staff",
+  "agents": {
+    "chief-of-staff": {
+      "description": "Ted's management consultant and chief of staff for the Apify vault",
+      "mode": "primary",
+      "system": "{file:SYSTEM_PROMPT.md}",
+      "permissions": [
+        { "action": "external_directory", "resource": "*", "effect": "deny" }
+      ]
+    }
+  },
+  "providers": {
+    "ollama-cloud": {
+      "settings": {
+        "apiKey": "{env:OLLAMA_API_KEY}"
+      },
+      "models": {
+        "deepseek-v4.1-flash": { "settings": { "reasoningEffort": "high" } },
+        "kimi-k3": { "settings": { "reasoningEffort": "high" } },
+        "kimi-k2.7-code": { "settings": { "reasoningEffort": "high" } },
+        "glm-5.3": { "settings": { "reasoningEffort": "high" } }
+      }
+    }
+  }
+}
