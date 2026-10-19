@@ -72,9 +72,10 @@
         "apiKey": "{env:OLLAMA_API_KEY}"
       },
       "models": {
-        "deepseek-v4.1-flash": { "settings": { "reasoningEffort": "high" } },
-        "kimi-k3": { "settings": { "reasoningEffort": "high" } },
-        "glm-5.3-flash": { "settings": { "reasoningEffort": "high" } }
+        "deepseek-v4.1-flash": { "settings": { "reasoningEffort": "max" } },
+        "kimi-k3": { "settings": { "reasoningEffort": "max" } },
+        "glm-5.3-flash": { "settings": { "reasoningEffort": "max" } },
+        "glm-5.3": { "settings": { "reasoningEffort": "max" } }
       }
     },
     "openrouter-shortlist": {
