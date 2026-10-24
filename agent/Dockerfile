@@ -59,7 +59,7 @@ RUN git clone https://github.com/nvm-sh/nvm.git /home/$USERNAME/.nvm
 RUN cd /home/$USERNAME/.nvm && git checkout v0.40.4
 
 SHELL ["/bin/bash", "-c"]
-RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24.22.0 && nvm alias default 24.22.0
+RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24.22.1 && nvm alias default 24.22.1
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @anthropic-ai/claude-code@2.1.302
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @openai/codex@0.163.0
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-coding-agent@1.3.0
