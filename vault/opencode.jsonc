@@ -74,8 +74,9 @@
       "models": {
         "deepseek-v4.1-flash": { "settings": { "reasoningEffort": "max" } },
         "kimi-k3": { "settings": { "reasoningEffort": "max" } },
+        "glm-5.3": { "settings": { "reasoningEffort": "max" } },
         "glm-5.3-flash": { "settings": { "reasoningEffort": "max" } },
-        "glm-5.3": { "settings": { "reasoningEffort": "max" } }
+        "minimax-m3.1-flash": { "settings": { "reasoningEffort": "max" } }
       }
     },
     "openrouter-shortlist": {
