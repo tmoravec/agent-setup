@@ -24,12 +24,30 @@
         "openai/gpt-6.1-sol": {},
         "anthropic/claude-opus-5.5": {}
       }
+    },
+    "fireworks-shortlist": {
+      "name": "Fireworks",
+      "canonical": "fireworks-ai",
+      "package": "@opencode/ai/providers/openai-compatible",
+      "env": ["FIREWORKS_API_KEY"],
+      "models": {
+        "accounts/fireworks/models/deepseek-v4p1-flash-1017": { "settings": { "reasoningEffort": "high" } },
+        "accounts/fireworks/models/deepseek-v4p1-flash-1017-spot": {
+          "name": "DeepSeek V4.1 Flash 1017 Spot",
+          "family": "deepseek-flash",
+          "releaseDate": "2026-10-17",
+          "settings": { "reasoningEffort": "high" },
+          "limit": { "context": 1000000, "output": 384000 }
+        },
+        "accounts/fireworks/models/glm-5p3-flash": { "settings": { "reasoningEffort": "high" } }
+      }
     }
   },
   "policies": [
     { "action": "provider.use", "resource": "*", "effect": "deny" },
     { "action": "provider.use", "resource": "ollama-cloud-shortlist", "effect": "allow" },
-    { "action": "provider.use", "resource": "openrouter-shortlist", "effect": "allow" }
+    { "action": "provider.use", "resource": "openrouter-shortlist", "effect": "allow" },
+    { "action": "provider.use", "resource": "fireworks-shortlist", "effect": "allow" }
   ],
   "plugins": ["/opt/ponytail/.opencode/plugins/ponytail"]
 }

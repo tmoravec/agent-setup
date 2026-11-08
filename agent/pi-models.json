@@ -12,6 +12,16 @@
         { "id": "deepseek-v4.1-flash", "reasoning": true, "contextWindow": 1048576, "maxTokens": 393216 },
         { "id": "mistral-large-4", "reasoning": true, "contextWindow": 1048576, "maxTokens": 131072 }
       ]
+    },
+    "fireworks": {
+      "baseUrl": "https://api.fireworks.ai/inference/v1",
+      "api": "openai-completions",
+      "apiKey": "$FIREWORKS_API_KEY",
+      "models": [
+        { "id": "accounts/fireworks/models/deepseek-v4p1-flash-1017", "reasoning": true, "contextWindow": 1000000, "maxTokens": 384000 },
+        { "id": "accounts/fireworks/models/deepseek-v4p1-flash-1017-spot", "reasoning": true, "contextWindow": 1000000, "maxTokens": 384000 },
+        { "id": "accounts/fireworks/models/glm-5p3-flash", "reasoning": true, "contextWindow": 1048573, "maxTokens": 131072 }
+      ]
     }
   }
 }

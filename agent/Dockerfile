@@ -70,7 +70,7 @@ RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24.22.2 && nvm alias defau
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @anthropic-ai/claude-code@2.1.302
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @openai/codex@0.163.0
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-coding-agent@1.5.0
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @opencode/cli@2.0.32
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @opencode/cli@2.2.6
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g apify-cli@1.10.0
 
 RUN source /home/$USERNAME/.nvm/nvm.sh \
