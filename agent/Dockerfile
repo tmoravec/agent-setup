@@ -55,14 +55,21 @@ COPY agent/ponytail /opt/ponytail
 USER $USERNAME
 ENV HOME=/home/tadeas
 
+RUN curl -LsSf https://astral.sh/uv/0.13.1/install.sh | sh
+
+# Intentionally unpinned: this is the user's own vim repository.
+RUN git clone --recursive https://github.com/tmoravec/vim /home/$USERNAME/vim-config
+RUN ln -s /home/$USERNAME/vim-config/vim /home/$USERNAME/.vim
+RUN ln -s /home/$USERNAME/vim-config/vimrc /home/$USERNAME/.vimrc
+
 RUN git clone https://github.com/nvm-sh/nvm.git /home/$USERNAME/.nvm
 RUN cd /home/$USERNAME/.nvm && git checkout v0.40.4
 
 SHELL ["/bin/bash", "-c"]
-RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24.22.0 && nvm alias default 24.22.0
+RUN source /home/$USERNAME/.nvm/nvm.sh && nvm install 24.22.2 && nvm alias default 24.22.2
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @anthropic-ai/claude-code@2.1.302
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @openai/codex@0.163.0
-RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-coding-agent@1.3.0
+RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @earendil-works/pi-coding-agent@1.5.0
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g @opencode/cli@2.0.32
 RUN source /home/$USERNAME/.nvm/nvm.sh && npm install -g apify-cli@1.10.0
 
@@ -73,13 +80,9 @@ RUN source /home/$USERNAME/.nvm/nvm.sh \
 	&& codex plugin marketplace add /opt/ponytail \
 	&& codex plugin add ponytail@ponytail
 RUN source /home/$USERNAME/.nvm/nvm.sh && pi install /opt/ponytail
-
-RUN curl -LsSf https://astral.sh/uv/0.13.1/install.sh | sh
-
-# Intentionally unpinned: this is the user's own vim repository.
-RUN git clone --recursive https://github.com/tmoravec/vim /home/$USERNAME/vim-config
-RUN ln -s /home/$USERNAME/vim-config/vim /home/$USERNAME/.vim
-RUN ln -s /home/$USERNAME/vim-config/vimrc /home/$USERNAME/.vimrc
+RUN source /home/$USERNAME/.nvm/nvm.sh \
+	&& pi install npm:pi-web-access@0.47.0 \
+	&& pi install npm:pi-subagents@0.87.0
 
 WORKDIR /workspace
 

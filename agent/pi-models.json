@@ -6,10 +6,11 @@
       "api": "openai-completions",
       "apiKey": "$OLLAMA_API_KEY",
       "models": [
-        { "id": "kimi-k3", "reasoning": true, "contextWindow": 1048576, "maxTokens": 131072 },
+        { "id": "kimi-k3.1-pro", "reasoning": true, "contextWindow": 1048576, "maxTokens": 131072 },
         { "id": "kimi-k2.7-code", "reasoning": true, "contextWindow": 262144, "maxTokens": 262144 },
         { "id": "glm-5.3", "reasoning": true, "contextWindow": 1048576, "maxTokens": 131072 },
-        { "id": "deepseek-v4.1-flash", "reasoning": true, "contextWindow": 1048576, "maxTokens": 393216 }
+        { "id": "deepseek-v4.1-flash", "reasoning": true, "contextWindow": 1048576, "maxTokens": 393216 },
+        { "id": "mistral-large-4", "reasoning": true, "contextWindow": 1048576, "maxTokens": 131072 }
       ]
     }
   }
