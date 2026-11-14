@@ -49,5 +49,6 @@
     { "action": "provider.use", "resource": "openrouter-shortlist", "effect": "allow" },
     { "action": "provider.use", "resource": "fireworks-shortlist", "effect": "allow" }
   ],
-  "plugins": ["/opt/ponytail/.opencode/plugins/ponytail"]
+  "websearch": { "provider": "brave" },
+  "plugins": ["/opt/ponytail/.opencode/plugins/ponytail", "/opt/opencode-brave-search"]
 }

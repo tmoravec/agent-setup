@@ -9,9 +9,10 @@ This repository builds Docker environments for running AI development tools and 
 - `docker-compose.yml` defines both services, their build arguments, mounts, ports, persistence, and runtime environment.
 - `agent/entrypoint.sh` registers runtime-mounted Claude plugins and starts opencode on the workspace.
 - `vault/entrypoint.sh` starts Supergateway, the OAuth callback bridge, and opencode, stopping all three if any exits.
-- `agent/opencode.jsonc`, `agent/pi-models.json`, `agent/pi-settings.json`, `agent/tmux.conf`, and `agent/claude-plugins-bootstrap.sh` configure the agent image.
+- `agent/opencode.jsonc`, `agent/pi-models.json`, `agent/pi-settings.json`, `agent/pi-web-search.json`, `agent/tmux.conf`, and `agent/claude-plugins-bootstrap.sh` configure the agent image.
 - `shared/bashrc` is shared by both images; it sources NVM only when present.
 - `shared/agents/` is copied into the agent image and shared by the supported AI tools through symlinks.
+- `shared/opencode-brave-search/` registers Brave Search as the OpenCode web search provider in both images.
 - `vault/` holds all vault-container files, including `opencode.jsonc`, `SYSTEM_PROMPT.md`, `AGENTS.md`, `entrypoint.sh`, and the vendored Slack and Google Calendar servers.
 - `agent/ponytail/` is the vendored ponytail plugin and CLI extension installed in the agent image.
 - `.dockerignore` keeps Git metadata, env files, and editor junk out of the build context. `.gitignore` keeps env files and editor junk out of Git. `reviews/` holds review output.

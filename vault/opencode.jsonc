@@ -53,7 +53,7 @@
     { "action": "webfetch", "resource": "*", "effect": "ask" },
     { "action": "websearch", "resource": "*", "effect": "ask" }
   ],
-  "plugins": ["/opt/vault-guard"],
+  "plugins": ["/opt/vault-guard", "/opt/opencode-brave-search"],
   "agents": {
     "chief-of-staff": {
       "description": "Ted's management consultant and chief of staff for the Apify vault",
@@ -156,5 +156,6 @@
     { "action": "provider.use", "resource": "ollama-cloud-shortlist", "effect": "allow" },
     { "action": "provider.use", "resource": "openrouter-shortlist", "effect": "allow" },
     { "action": "provider.use", "resource": "fireworks-shortlist", "effect": "allow" }
-  ]
+  ],
+  "websearch": { "provider": "brave" }
 }

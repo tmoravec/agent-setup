@@ -32,6 +32,7 @@ RUN mkdir -p /home/$USERNAME/.config/opencode /home/$USERNAME/.local/share/openc
 COPY --chown=$USERNAME:$USERNAME vault/opencode.jsonc /home/$USERNAME/.config/opencode/opencode.jsonc
 COPY --chown=$USERNAME:$USERNAME vault/SYSTEM_PROMPT.md /home/$USERNAME/.config/opencode/SYSTEM_PROMPT.md
 COPY --chown=$USERNAME:$USERNAME vault/AGENTS.md /home/$USERNAME/.config/opencode/AGENTS.md
+COPY --chown=$USERNAME:$USERNAME shared/opencode-brave-search /opt/opencode-brave-search
 
 COPY vault/slack/slack-mcp-server-linux-${TARGETARCH} /usr/local/bin/slack-mcp-server
 RUN chmod +x /usr/local/bin/slack-mcp-server
@@ -48,6 +49,6 @@ USER $USERNAME
 ENV HOME=/home/tadeas
 ENV NPM_CONFIG_PREFIX=/home/tadeas/.npm-global
 ENV PATH=/home/tadeas/.npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-RUN npm install -g supergateway@4.2.0 @modelcontextprotocol/server-filesystem@1.0.0 @opencode/cli@2.0.32
+RUN npm install -g supergateway@4.2.0 @modelcontextprotocol/server-filesystem@1.0.0 @opencode/cli@2.2.6
 
 CMD ["/app/entrypoint.sh"]

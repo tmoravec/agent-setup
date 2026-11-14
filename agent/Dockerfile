@@ -47,10 +47,12 @@ RUN ln -s /home/$USERNAME/.agents/AGENTS.md /home/$USERNAME/.config/opencode/AGE
 RUN mkdir -p /home/$USERNAME/.pi/agent && chown -R $USERNAME:$USERNAME /home/$USERNAME/.pi
 COPY --chown=$USERNAME:$USERNAME agent/pi-models.json /home/$USERNAME/.pi/agent/models.json
 COPY --chown=$USERNAME:$USERNAME agent/pi-settings.json /home/$USERNAME/.pi/agent/settings.json
+COPY --chown=$USERNAME:$USERNAME agent/pi-web-search.json /home/$USERNAME/.pi/agent/web-search.json
 COPY --chown=$USERNAME:$USERNAME agent/tmux.conf /home/$USERNAME/.tmux.conf
 COPY --chmod=755 agent/claude-plugins-bootstrap.sh /usr/local/bin/claude-plugins-bootstrap
 COPY --chown=$USERNAME:$USERNAME --chmod=755 agent/entrypoint.sh /home/$USERNAME/start-agent.sh
 COPY agent/ponytail /opt/ponytail
+COPY --chown=$USERNAME:$USERNAME shared/opencode-brave-search /opt/opencode-brave-search
 
 USER $USERNAME
 ENV HOME=/home/tadeas
